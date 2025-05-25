@@ -1,7 +1,17 @@
 const createOrder = {
     type: "object",
-    properties: {},
-    required: [],
+    properties: {
+        price: {
+            type: 'string'
+        },
+        type: {
+            type: 'string'
+        },
+        userId: {
+            type: 'number'
+        }
+    },
+    required: ["price", "type", "userId",],
     additionalProperties: false
 };
 

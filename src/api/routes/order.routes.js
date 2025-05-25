@@ -1,9 +1,11 @@
 const express = require('express');
 const Response = require('../../helper/response')
 const schema = require('../../schema/order.schema')
+const OrderController = require('../controllers/order.controller')
 const authMiddleware = require('../../middleware/auth.middleware')
 const validateSchema = require('../../middleware/validate.middleware')
 
+const orderController = new OrderController()
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -14,14 +16,12 @@ router.get('/', async (req, res) => {
     }
     catch (error) {
         if (error.status && error.result)
-            res.send( Response.generate(error.status, error.result))
+            res.send(Response.generate(error.status, error.result))
         else
-            res.send( error)
+            res.send(error)
     }
 })
 
-router.post('/', validateSchema(schema.createOrder), async (req, res) => {
-    res.send('add data')
-})
+router.post('/', validateSchema(schema.createOrder),orderController.createOrder)
 
 module.exports = router;

@@ -1,16 +1,23 @@
 const errors = {
     invalidToken: {
         status: 403,
-        messages: {
+        message: {
             'fa': 'توکن معتبر نیست',
             'en': 'Invalid token'
         }
     },
     missingToken: {
         status: 401,
-        messages: {
+        message: {
             'fa': 'توکن احراز هویت ارسال نشده است',
             'en': 'Authentication token missing'
+        }
+    },
+    userNotFound: {
+        status: 404,
+        message: {
+            'fa': 'کاربر یافت نشد',
+            'en': 'user not found'
         }
     }
 
