@@ -1,5 +1,4 @@
 const { readFileSync } = require('fs');
-const { config } = require('../config/db')
 const path = require('path');
 
 const { Pool } = require('pg');
@@ -7,7 +6,7 @@ const { Pool } = require('pg');
 class DB {
     static pool;
 
-    static async connect() {
+    static async connect(config) {
         let retries = 5;
         while (retries > 0) {
             try {

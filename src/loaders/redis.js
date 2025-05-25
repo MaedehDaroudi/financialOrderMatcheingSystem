@@ -4,7 +4,7 @@ const redis = new IoRedis();
 class Redis {
     constructor() { }
 
-    static async connect() {
+    static async init() {
         const redis = new IoRedis({
             port: +process.env.REDIS_PORT,
             host: process.env.REDIS_HOST,
@@ -12,7 +12,7 @@ class Redis {
         return redis
     }
 
-    static async CacheSet(key, value, ttlInSeconds = 900) {
+    static async CacheSet(key, value, ttlInSeconds) {
         await redis.set(key, JSON.stringify(value), 'EX', ttlInSeconds);
     }
 

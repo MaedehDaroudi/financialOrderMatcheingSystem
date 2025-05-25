@@ -1,4 +1,4 @@
-exports.config = {
+exports.dbConfig = {
     port: +process.env.DB_PORT,
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
