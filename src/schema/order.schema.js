@@ -1,4 +1,4 @@
-const createOrder = {
+createOrder = {
     type: "object",
     properties: {
         price: {
@@ -11,8 +11,14 @@ const createOrder = {
             type: 'number'
         }
     },
-    required: ["price", "type", "userId",],
+    required: ["price", "type", "userId"],
     additionalProperties: false
 };
 
-module.exports = { createOrder };
+matchWithMarket = {
+    properties: {
+    },
+    additionalProperties: false
+}
+
+module.exports = { createOrder, matchWithMarket };

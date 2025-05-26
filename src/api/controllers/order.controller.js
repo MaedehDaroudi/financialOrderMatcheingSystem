@@ -23,6 +23,20 @@ class OrderController {
         }
     }
 
+    async matchWithMarket(req, res) {
+        try {
+            await authMiddleware.authenticate(req)
+            const result = await orderService.matchWithMarket()
+            res.send(Response.generate(200, result))
+        }
+        catch (error) {
+            if (error.status && error.result)
+                res.send(Response.generate(error.status, error.result))
+            else
+                res.send(error)
+        }
+    }
+
 }
 
 module.exports = OrderController

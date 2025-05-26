@@ -1,3 +1,4 @@
+const axios = require('axios');
 const redis = require('../loaders/redis')
 const message = require('../constants/messages')
 const UsersService = require('../services/user.service')
@@ -18,6 +19,62 @@ class OrderService {
         const result = await orderRepository.create(userId, price, type)
         await redis.cacheDel('orders_data')
         return message.orderCreated
+    }
+
+    async matchWithMarket() {
+        let marketPrice = await redis.cacheGet('marketPrice')
+        if (!marketPrice) {
+            marketPrice = (await this.fetchMarketData()).price
+            marketPrice = this.convertPriceToTmn(marketPrice)
+            redis.CacheSet('marketPrice', marketPrice, 900)
+        }
+        const openOrders = await orderRepository.receiveOpenOrder();
+        const matchedOrders = this.getMatchedOrders(openOrders, marketPrice)
+
+        if (matchedOrders.length) {
+            let promise = []
+            for (let i = 0; i < matchedOrders.length; i++) {
+                const order = matchedOrders[i]
+                promise.push(orderRepository.closeOrder(order.id, marketPrice))
+            }
+            const results = await Promise.allSettled(promise)
+            const allSuccessful = results.every(result => result.status === 'fulfilled');
+            if (allSuccessful) {
+                redis.cacheDel('orderData')
+                return message.orderUpdated
+            }
+            else {
+                // rollback
+            }
+        }
+        else
+           return message.orderUpdated
+    }
+
+    async fetchMarketData() {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'https://www.goldapi.io/api/XAU/USD',
+            headers: { 'x-access-token': 'goldapi-1jpism92pvoea-io' }
+        };
+
+        const marketData = await axios.request(config)
+        return marketData.data
+    }
+
+    convertPriceToTmn(goldPrice) {
+        const xauUsd = goldPrice;
+        const usdTmn = 82000;
+        const gram18kTmn = (xauUsd * usdTmn) / 31.1035 * 0.75;;
+        return Math.round(gram18kTmn)
+    }
+
+    getMatchedOrders(openOrders, marketPrice) {
+        return openOrders.filter(order => {
+            if (order.type === 'buy') return order.price > marketPrice;
+            else if (order.type === 'sell') return order.price < marketPrice;
+        });
     }
 }
 

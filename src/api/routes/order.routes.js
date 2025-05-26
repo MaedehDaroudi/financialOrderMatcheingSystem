@@ -23,5 +23,6 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', validateSchema(schema.createOrder),orderController.createOrder)
+router.get('/match-with-market', validateSchema(schema.matchWithMarket), orderController.matchWithMarket)
 
 module.exports = router;
