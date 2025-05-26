@@ -8,6 +8,21 @@ class OrderController {
     constructor() {
     }
 
+    async receiveOrder(req, res) {
+        try {
+            await authMiddleware.authenticate(req)
+            const { id, type, status } = req.query
+            const result = await orderService.receiveOrder(id, type, status)
+            res.send(Response.generate(200, result))
+        }
+        catch (error) {
+            if (error.status && error.result)
+                res.send(Response.generate(error.status, error.result))
+            else
+                res.send(error)
+        }
+    }
+
     async createOrder(req, res) {
         try {
             await authMiddleware.authenticate(req)

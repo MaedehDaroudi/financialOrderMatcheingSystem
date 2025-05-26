@@ -5,16 +5,17 @@ const orderModel = new OrderModels
 
 class OrderRepository {
     constructor() {
-
     }
 
-    async receive(orderId) {
-        const { query, value } = Queries.receive('orders', '*', 'id', orderId)
+    async receiveOrder(id, type, status) {
+        orderModel.receiveOrder = { id, type, status }
+        const { table, fields, conditions } = orderModel.receiveOrder
+        const { query, value } = Queries.receive(table, fields, conditions)
         const result = await DB.query(query, value)
-        return result
+        return result.rows
     }
 
-    async create(userId, price, type) {
+    async createOrder(userId, price, type) {
         orderModel.create = { userId, price, type }
         const createModel = orderModel.create
         const { query, value } = Queries.create(createModel.table, createModel.inputData)
@@ -24,8 +25,8 @@ class OrderRepository {
 
     async receiveOpenOrder() {
         orderModel.receiveOpenOrder = null
-        const { table, fields, conditionField, conditionValue } = orderModel.receiveOpenOrder
-        const { query, value } = Queries.receive(table, fields, conditionField, conditionValue)
+        const { table, fields, condition } = orderModel.receiveOpenOrder
+        const { query, value } = Queries.receive(table, fields, condition)
         const result = await DB.query(query, value)
         return result.rows
     }

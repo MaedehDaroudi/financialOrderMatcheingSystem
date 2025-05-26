@@ -1,9 +1,17 @@
 class OrderModel {
     #create
+    #receiveModel;
     #closeOrderModel
     #receiveOpenOrder
 
     constructor() {
+
+        this.#receiveModel = {
+            table: 'orders',
+            fields: '*',
+            conditions: {}
+        }
+
         this.#create = {
             table: 'orders',
             inputData: {}
@@ -40,8 +48,7 @@ class OrderModel {
     set receiveOpenOrder(data) {
         this.#receiveOpenOrder = {
             ...this.#receiveOpenOrder,
-            conditionField: 'status',
-            conditionValue: 'open',
+            condition: { 'status': 'open' }
         }
     }
 
@@ -62,6 +69,16 @@ class OrderModel {
 
     get closeOrder() {
         return this.#closeOrderModel
+    }
+
+    set receiveOrder(data) {
+        if (data?.id) this.#receiveModel.conditions.id = data.id
+        if (data?.type) this.#receiveModel.conditions.type = data.type
+        if (data?.status) this.#receiveModel.conditions.status = data.status
+    }
+
+    get receiveOrder() {
+        return this.#receiveModel
     }
 }
 

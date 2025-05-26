@@ -11,13 +11,27 @@ class OrderService {
 
     }
 
+    async receiveOrder(id, type, status) {
+        const localKey = 'orderData' + Object.entries({ id, type, status })
+            .filter(([_, value]) => value !== undefined)
+            .map(([key, value]) => `_${key}_${value}`)
+            .join('');
+
+        let orderData = await redis.cacheGet(localKey)
+        if (!orderData) {
+            orderData = await orderRepository.receiveOrder(id, type, status)
+            await redis.CacheSet(localKey, orderData, process.env.REDIS_TTL)
+        }
+        return orderData
+    }
+
     async createOrder(userId, price, type) {
         const userData = await usersService.receiveUser(userId)
         if (!userData.length)
             throw errorConstants.userNotFound
 
-        const result = await orderRepository.create(userId, price, type)
-        await redis.cacheDel('orders_data')
+        const result = await orderRepository.createOrder(userId, price, type)
+        await redis.cacheDel('ordersData')
         return message.orderCreated
     }
 
@@ -26,29 +40,28 @@ class OrderService {
         if (!marketPrice) {
             marketPrice = (await this.fetchMarketData()).price
             marketPrice = this.convertPriceToTmn(marketPrice)
-            redis.CacheSet('marketPrice', marketPrice, 900)
+            redis.CacheSet('marketPrice', marketPrice, process.env.REDIS_TTL)
         }
         const openOrders = await orderRepository.receiveOpenOrder();
         const matchedOrders = this.getMatchedOrders(openOrders, marketPrice)
 
-        if (matchedOrders.length) {
-            let promise = []
-            for (let i = 0; i < matchedOrders.length; i++) {
-                const order = matchedOrders[i]
-                promise.push(orderRepository.closeOrder(order.id, marketPrice))
-            }
-            const results = await Promise.allSettled(promise)
-            const allSuccessful = results.every(result => result.status === 'fulfilled');
-            if (allSuccessful) {
-                redis.cacheDel('orderData')
-                return message.orderUpdated
-            }
-            else {
-                // rollback
-            }
+        if (!matchedOrders.length) return message.orderUpdated
+
+        const closePromises = matchedOrders.map(order =>
+            orderRepository.closeOrder(order.id, marketPrice)
+        );
+
+        const results = await Promise.allSettled(closePromises)
+        const allSuccessful = results.every(result => result.status === 'fulfilled');
+        if (allSuccessful) {
+            redis.cacheDel('orderData')
+            return message.orderUpdated
         }
-        else
-           return message.orderUpdated
+        else {
+            // rollback (TO DO)
+            throw errorConstants.orderUpdateFailed
+        }
+
     }
 
     async fetchMarketData() {

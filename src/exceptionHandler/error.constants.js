@@ -19,8 +19,14 @@ const errors = {
             'fa': 'کاربر یافت نشد',
             'en': 'user not found'
         }
+    },
+    orderUpdateFailed: {
+        status: 400,
+        message: {
+            'fa': 'خطا در بروز رسانی سفارشات',
+            'env':'update failed!'
+        }
     }
-
 }
 
 module.exports = errors

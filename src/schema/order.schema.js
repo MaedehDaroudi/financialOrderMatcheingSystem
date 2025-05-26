@@ -16,9 +16,27 @@ createOrder = {
 };
 
 matchWithMarket = {
+    type: "object",
     properties: {
     },
     additionalProperties: false
 }
 
-module.exports = { createOrder, matchWithMarket };
+receiveOrders = {
+    type: 'object',
+    properties: {
+        id: {
+            type:'string'
+        },
+        status:{
+            type:'string'
+        },
+        type:{
+            type:'string'
+        }
+    },
+    required: [],
+    additionalProperties: false
+}
+
+module.exports = { createOrder, matchWithMarket, receiveOrders };

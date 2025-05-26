@@ -8,21 +8,8 @@ const validateSchema = require('../../middleware/validate.middleware')
 const orderController = new OrderController()
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-    try {
-        await authMiddleware.authenticate(req)
-        const result = { messages: 'receive data' }
-        res.send(Response.generate(200, result))
-    }
-    catch (error) {
-        if (error.status && error.result)
-            res.send(Response.generate(error.status, error.result))
-        else
-            res.send(error)
-    }
-})
-
-router.post('/', validateSchema(schema.createOrder),orderController.createOrder)
+router.get('/', validateSchema(schema.receiveOrders), orderController.receiveOrder)
+router.post('/', validateSchema(schema.createOrder), orderController.createOrder)
 router.get('/match-with-market', validateSchema(schema.matchWithMarket), orderController.matchWithMarket)
 
 module.exports = router;

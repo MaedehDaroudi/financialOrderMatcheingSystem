@@ -2,14 +2,19 @@ class Queries {
     constructor() { }
 
 
-    static receive(table, fields, conditionField, conditionValue) {
+    static receive(table, fields, condition = {}) {
         const dbQuery = {
             query: `select ${fields} from ${table}`,
             value: []
         }
-        if (conditionField.length) {
-            dbQuery.query += ` where ${conditionField}=$1`
-            dbQuery.value.push(conditionValue)
+        const conditionValue = Object.keys(condition)
+        if (conditionValue.length) {
+            dbQuery.query += ` where ${conditionValue[0]}=$1`
+            dbQuery.value.push(condition[conditionValue[0]])
+            for (let i = 1; i < conditionValue.length; i++) {
+                dbQuery.query += ` and ${conditionValue[i]}=$${i + 1} `
+                dbQuery.value.push(condition[conditionValue[i]])
+            }
         }
         return dbQuery
     }
@@ -38,7 +43,7 @@ class Queries {
         }
 
         const dbQuery = {
-            query: `update ${table} SET ${updateData} where ${conditionField} = $${countDataValues.length+1}`,
+            query: `update ${table} SET ${updateData} where ${conditionField} = $${countDataValues.length + 1}`,
             value: [...values, conditionValue]
         }
         return dbQuery
