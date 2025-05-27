@@ -1,0 +1,318 @@
+{
+	"info": {
+		"_postman_id": "af599f51-bc82-4830-a7c2-493da4caafe4",
+		"name": "OrderMatchingSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26725290",
+		"_collection_link": "https://noban-team.postman.co/workspace/Team-Workspace~984e3d0d-cf16-46ef-8ac2-96cb7ce38d0a/collection/26725290-af599f51-bc82-4830-a7c2-493da4caafe4?action=share&source=collection_link&creator=26725290"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"newUser7\",\n    \"password\":\"123456\",\n    \"role\":\"Customer\",\n    \"email\":\"a@gmail.com\",\n    \"phone\":\"09150000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/register",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"{{username}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/login",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "create order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\":\"buy\",\r\n    \"price\":\"20000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/order",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "match with market",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/order/match-with-market",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order",
+								"match-with-market"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "receiveOrder",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/order?id=1",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								},
+								{
+									"key": "type",
+									"value": "buy",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "closed",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":4,\r\n    \"type\":\"buy\",\r\n    \"price\":\"20000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/order",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6Miwicm9sZSI6InRlc3QiLCJwaG9uZSI6IjA5MTUwMDAwMDAwIiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc0ODM2MDQ5OSwiZXhwIjoxNzQ4MzY0MDk5fQ.cBG_ZlCMombNF1r5rNtq381btkj1BeXYD0LND8za3kg"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\":52\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{serverUrl}}/api/v1/order",
+							"host": [
+								"{{serverUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6Miwicm9sZSI6InRlc3QiLCJwaG9uZSI6IjA5MTUwMDAwMDAwIiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc0ODM0NDU2NywiZXhwIjoxNzQ4MzQ4MTY3fQ.beryPfBbM2F6daeJisRFMmzH0MzjP0_GkDB5trMp6pM",
+			"type": "string"
+		},
+		{
+			"key": "serverUrl",
+			"value": "127.0.0.1:8080",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "test",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "123456",
+			"type": "string"
+		}
+	]
+}
