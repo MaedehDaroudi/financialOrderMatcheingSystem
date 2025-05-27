@@ -26,7 +26,15 @@ const errors = {
             'fa': 'خطا در بروز رسانی سفارشات',
             'env':'update failed!'
         }
+    },
+    userAlreadyExist: {
+        status: 409,
+        message: {
+            'fa':'نام کاربری قبلاً ثبت شده است.',
+            'en':'Username already exists'
+        }
     }
+
 }
 
 module.exports = errors

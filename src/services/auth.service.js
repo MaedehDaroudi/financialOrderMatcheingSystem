@@ -1,4 +1,8 @@
 const jwt = require('jsonwebtoken');
+const PasswordManager = require('../helper/passwordManager');
+const AuthRepository = require('../repositories/auth.repository');
+const errorConstant = require('../exceptionHandler/error.constants')
+const authRepository = new AuthRepository()
 
 exports.login = async (username, password) => {
     if (
@@ -12,4 +16,14 @@ exports.login = async (username, password) => {
     }
 
     throw new Error('Invalid credentials');
+};
+
+exports.register = async (userData) => {
+    const existingUser = await authRepository.findByUsername(userData.username);
+    if (existingUser?.length) 
+        throw errorConstant.userAlreadyExist
+
+    userData.password = PasswordManager.hash(userData.password);
+    const user = await authRepository.createUser(userData);
+    return user;
 };

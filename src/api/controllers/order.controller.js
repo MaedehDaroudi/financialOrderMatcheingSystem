@@ -16,8 +16,8 @@ class OrderController {
             res.send(Response.generate(200, result))
         }
         catch (error) {
-            if (error.status && error.result)
-                res.send(Response.generate(error.status, error.result))
+            if (error.status && error.message)
+                res.send(Response.generate(error.status, error.message))
             else
                 res.send(error)
         }
@@ -31,10 +31,11 @@ class OrderController {
             res.send(Response.generate(200, result))
         }
         catch (error) {
-            if (error.status && error.result)
-                res.send(Response.generate(error.status, error.result))
+            if (error.status && error.message)
+                res.send(Response.generate(error.status, error.message))
             else
-                res.send(error)
+                res.send(Response.generate(null, error))
+
         }
     }
 
@@ -48,7 +49,8 @@ class OrderController {
             if (error.status && error.result)
                 res.send(Response.generate(error.status, error.result))
             else
-                res.send(error)
+                res.send(Response.generate(null, error))
+
         }
     }
 

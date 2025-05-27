@@ -1,3 +1,5 @@
+const Response = require('../../helper/response')
+const message = require('../../constants/messages')
 const authService = require('../../services/auth.service');
 
 exports.login = async (req, res) => {
@@ -8,5 +10,19 @@ exports.login = async (req, res) => {
         return res.json({ token });
     } catch (err) {
         return res.status(401).json({ message: err.message });
+    }
+};
+
+exports.register = async (req, res) => {
+    const userData = req.body;
+
+    try {
+        await authService.register(userData);
+        res.send(Response.generate(200, message.userRegister))
+    } catch (error) {
+        if (error.status && error.message)
+            res.send(Response.generate(error.status, error.message))
+        else
+            res.send(Response.generate(null, error))
     }
 };

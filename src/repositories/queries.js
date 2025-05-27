@@ -22,7 +22,7 @@ class Queries {
     static create(table, data) {
         let variables = '$1'
         for (let i = 2; i <= Object.keys(data).length; i++)
-            variables += `,$${i}`
+                variables += `,$${i}`
 
         const dbQuery = {
             query: `insert into ${table} (${Object.keys(data)}) values (${variables})`,
