@@ -5,22 +5,28 @@ const errorConstant = require('../exceptionHandler/error.constants')
 const authRepository = new AuthRepository()
 
 exports.login = async (username, password) => {
-    if (
-        username === process.env.AUTH_USERNAME &&
-        password === process.env.AUTH_PASSWORD
-    ) {
-        const token = jwt.sign({ username }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
-        });
+    const userData = await authRepository.findByUsername(username);
+    if (!userData.length)
+        throw errorConstant.userNotFound
+
+    if (PasswordManager.verify(password, userData?.[0]?.password)) {
+        const token = jwt.sign({
+            username,
+            id: userData?.[0]?.id,
+            role: userData?.[0]?.role,
+            phone: userData?.[0]?.phone,
+            email: userData?.[0]?.email
+        },
+            process.env.JWT_SECRET, { expiresIn: '1h', });
         return token;
     }
 
-    throw new Error('Invalid credentials');
+    throw errorConstant.InvalidCredentials;
 };
 
 exports.register = async (userData) => {
     const existingUser = await authRepository.findByUsername(userData.username);
-    if (existingUser?.length) 
+    if (existingUser?.length)
         throw errorConstant.userAlreadyExist
 
     userData.password = PasswordManager.hash(userData.password);

@@ -32,9 +32,9 @@ class OrderController {
         }
         catch (error) {
             if (error.status && error.message)
-                res.send(Response.generate(error.status, error.message))
+                res.status(error.status).send(Response.generate(error.status, error.message))
             else
-                res.send(Response.generate(null, error))
+                res.status(400).send(Response.generate(null, error))
 
         }
     }
@@ -47,13 +47,11 @@ class OrderController {
         }
         catch (error) {
             if (error.status && error.result)
-                res.send(Response.generate(error.status, error.result))
+                res.status(error.status).send(Response.generate(error.status, error.result))
             else
-                res.send(Response.generate(null, error))
-
+                res.status(400).send(Response.generate(null, error))
         }
     }
-
 }
 
 module.exports = OrderController

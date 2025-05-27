@@ -7,9 +7,12 @@ exports.login = async (req, res) => {
 
     try {
         const token = await authService.login(username, password);
-        return res.json({ token });
-    } catch (err) {
-        return res.status(401).json({ message: err.message });
+        res.send(Response.generate(200, { token }))
+    } catch (error) {
+        if (error.status && error.message)
+            res.status(error.status).send(Response.generate(error.status, error.message))
+        else
+            res.status(400).send(Response.generate(null, error))
     }
 };
 
@@ -21,8 +24,8 @@ exports.register = async (req, res) => {
         res.send(Response.generate(200, message.userRegister))
     } catch (error) {
         if (error.status && error.message)
-            res.send(Response.generate(error.status, error.message))
+            res.status(error.status).send(Response.generate(error.status, error.message))
         else
-            res.send(Response.generate(null, error))
+            res.status(400).send(Response.generate(null, error))
     }
 };

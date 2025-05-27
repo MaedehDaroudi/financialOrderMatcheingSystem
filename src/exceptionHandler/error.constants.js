@@ -24,14 +24,21 @@ const errors = {
         status: 400,
         message: {
             'fa': 'خطا در بروز رسانی سفارشات',
-            'env':'update failed!'
+            'env': 'update failed!'
         }
     },
     userAlreadyExist: {
         status: 409,
         message: {
-            'fa':'نام کاربری قبلاً ثبت شده است.',
-            'en':'Username already exists'
+            'fa': 'نام کاربری قبلاً ثبت شده است.',
+            'en': 'Username already exists'
+        }
+    },
+    InvalidCredentials: {
+        status: 401,
+        message: {
+            'fa': 'احراز هویت انجام نشد.',
+            'en': 'Invalid credentials'
         }
     }
 
