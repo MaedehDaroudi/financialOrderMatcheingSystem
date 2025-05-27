@@ -1,42 +1,65 @@
-createOrder = {
-    type: "object",
-    properties: {
-        price: {
-            type: 'string'
+const schema = {
+    createOrder: {
+        type: "object",
+        properties: {
+            price: {
+                type: 'string'
+            },
+            type: {
+                type: 'string'
+            }
         },
-        type: {
-            type: 'string'
+        required: ["price", "type", "userId"],
+        additionalProperties: false
+    },
+    matchWithMarket: {
+        type: "object",
+        properties: {
         },
-        userId: {
-            type: 'number'
-        }
+        additionalProperties: false
     },
-    required: ["price", "type", "userId"],
-    additionalProperties: false
-};
-
-matchWithMarket = {
-    type: "object",
-    properties: {
+    receiveOrders: {
+        type: 'object',
+        properties: {
+            id: {
+                type: 'string'
+            },
+            status: {
+                type: 'string'
+            },
+            type: {
+                type: 'string'
+            }
+        },
+        required: [],
+        additionalProperties: false
     },
-    additionalProperties: false
+    updateOrder: {
+        type: "object",
+        properties: {
+            id: {
+                type: 'string'
+            },
+            price: {
+                type: 'string'
+            },
+            type: {
+                type: 'string'
+            }
+        },
+        required: ["price", "type", "userId"],
+        additionalProperties: false
+    },
+    removeOrder: {
+        type: "object",
+        properties: {
+            id: {
+                type: 'string'
+            }
+        },
+        required: ["price", "type", "userId"],
+        additionalProperties: false
+    }
 }
 
-receiveOrders = {
-    type: 'object',
-    properties: {
-        id: {
-            type:'string'
-        },
-        status:{
-            type:'string'
-        },
-        type:{
-            type:'string'
-        }
-    },
-    required: [],
-    additionalProperties: false
-}
-
-module.exports = { createOrder, matchWithMarket, receiveOrders };
+module.exports = schema;

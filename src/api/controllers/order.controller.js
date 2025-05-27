@@ -52,6 +52,39 @@ class OrderController {
                 res.status(400).send(Response.generate(null, error))
         }
     }
+
+
+    async updateOrder(req, res) {
+        try {
+            req.user = await authMiddleware.authenticate(req)
+            const { price, type,id } = req.body
+            const result = await orderService.updateOrder(req.user.username,id, price, type)
+            res.send(Response.generate(200, result))
+        }
+        catch (error) {
+            if (error.status && error.message)
+                res.status(error.status).send(Response.generate(error.status, error.message))
+            else
+                res.status(400).send(Response.generate(null, error))
+
+        }
+    }
+
+    async removeOrder(req, res) {
+        try {
+            req.user = await authMiddleware.authenticate(req)
+            const { id } = req.body
+            const result = await orderService.removeOrder(req.user.username, id)
+            res.send(Response.generate(200, result))
+        }
+        catch (error) {
+            if (error.status && error.message)
+                res.status(error.status).send(Response.generate(error.status, error.message))
+            else
+                res.status(400).send(Response.generate(null, error))
+
+        }
+    }
 }
 
 module.exports = OrderController

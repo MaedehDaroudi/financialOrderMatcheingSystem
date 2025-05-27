@@ -61,6 +61,13 @@ class OrderService {
             // rollback (TO DO)
             throw errorConstants.orderUpdateFailed
         }
+    }
+
+    async updateOrder(username, orderId, price, type) {
+
+    }
+
+    async removeOrder(orderId) {
 
     }
 
