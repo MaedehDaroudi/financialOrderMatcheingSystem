@@ -196,7 +196,7 @@ Authorization: Bearer <token>
 <br/>
 
 <details>
-<summary><span style="font-size: 18px;"> هماهنگی سفارشات با قیمت بازار 🔄 </span></summary>
+<summary><span style="font-size: 18px;"> 🔄 هماهنگی سفارشات با قیمت بازار  </span></summary>
 
 
 
