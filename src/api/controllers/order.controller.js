@@ -27,7 +27,7 @@ class OrderController {
         try {
             req.user = await authMiddleware.authenticate(req)
             const { price, type } = req.body
-            const result = await orderService.createOrder(req.user.username,req.user.id, price, type)
+            const result = await orderService.createOrder(req.user.username, req.user.id, price, type)
             res.send(Response.generate(200, result))
         }
         catch (error) {
@@ -57,8 +57,8 @@ class OrderController {
     async updateOrder(req, res) {
         try {
             req.user = await authMiddleware.authenticate(req)
-            const { price, type,id } = req.body
-            const result = await orderService.updateOrder(req.user.username,id, price, type)
+            const { price, type, id } = req.body
+            const result = await orderService.updateOrder(req.user.id, id, price, type)
             res.send(Response.generate(200, result))
         }
         catch (error) {

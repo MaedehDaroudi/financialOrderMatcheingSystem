@@ -9,7 +9,7 @@ const schema = {
                 type: 'string'
             }
         },
-        required: ["price", "type", "userId"],
+        required: ["price", "type"],
         additionalProperties: false
     },
     matchWithMarket: {
@@ -47,8 +47,12 @@ const schema = {
                 type: 'string'
             }
         },
-        required: ["price", "type", "userId"],
-        additionalProperties: false
+        required: ["id"],
+        additionalProperties: false,
+        anyOf: [
+            { required: ["price"] },
+            { required: ["type"] }
+        ]
     },
     removeOrder: {
         type: "object",

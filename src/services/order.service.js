@@ -63,8 +63,16 @@ class OrderService {
         }
     }
 
-    async updateOrder(username, orderId, price, type) {
+    async updateOrder(userId, orderId, price, type) {
+        const orderData = await orderRepository.receiveOrder(orderId)
+        if (!orderData?.length || userId !== orderData?.[0]?.user_id)
+            throw errorConstants.userOrderNotFound
 
+        if (orderData?.[0]?.status !== 'open')
+            throw errorConstants.OrderEditNotAllowed
+        await orderRepository.updateOrder(orderId, price, type)
+        await redis.cacheDel('ordersData')
+        return message.userOrderUpdated
     }
 
     async removeOrder(orderId) {

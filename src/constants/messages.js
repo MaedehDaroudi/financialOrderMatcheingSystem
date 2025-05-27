@@ -11,6 +11,10 @@ const message = {
         fa: "کاربر ثبت نام شد.",
         en: "user register"
     },
+    userOrderUpdated: {
+        fa: "سفارش‌ شما ویرایش شد",
+        en: "Your order has been updated",
+    }
 }
 
 module.exports = message

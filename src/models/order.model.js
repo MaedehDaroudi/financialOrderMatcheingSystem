@@ -1,5 +1,6 @@
 class OrderModel {
     #create
+    #updateModel;
     #receiveModel;
     #closeOrderModel
     #receiveOpenOrder
@@ -26,6 +27,13 @@ class OrderModel {
             table: 'orders',
             conditionField: 'id',
 
+        }
+
+        this.#updateModel = {
+            table: 'orders',
+            data: {},
+            conditionField: 'id',
+            conditionValue: null
         }
     }
 
@@ -72,13 +80,23 @@ class OrderModel {
     }
 
     set receiveOrder(data) {
-        if (data?.id) this.#receiveModel.conditions.id = data.id
+        if (data?.id) this.#receiveModel.conditions.id = +data.id
         if (data?.type) this.#receiveModel.conditions.type = data.type
         if (data?.status) this.#receiveModel.conditions.status = data.status
     }
 
     get receiveOrder() {
         return this.#receiveModel
+    }
+
+    set updateOrder(data) {
+        this.#updateModel.conditionValue = +data.orderId;
+        if (data.type) this.#updateModel.data.type = data.type
+        if (data.price) this.#updateModel.data.price = data.price
+    }
+
+    get updateOrder() {
+        return this.#updateModel
     }
 }
 

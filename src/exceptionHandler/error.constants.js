@@ -1,3 +1,5 @@
+const message = require("../constants/messages")
+
 const errors = {
     invalidToken: {
         status: 403,
@@ -40,8 +42,21 @@ const errors = {
             'fa': 'احراز هویت انجام نشد.',
             'en': 'Invalid credentials'
         }
+    },
+    userOrderNotFound: {
+        status: 404,
+        message: {
+            'fa': 'چنین سفارشی برای شما ثبت نشده است.',
+            'en': 'No such order has been registered for you.'
+        }
+    },
+    OrderEditNotAllowed: {
+        status: 409,
+        message: {
+            'fa': 'این سفارش قابلیت ویرایش ندارد',
+            'en': 'This order cannot be edited.'
+        }
     }
-
 }
 
 module.exports = errors
