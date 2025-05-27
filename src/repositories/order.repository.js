@@ -20,7 +20,7 @@ class OrderRepository {
         const createModel = orderModel.create
         const { query, value } = Queries.create(createModel.table, createModel.inputData)
         const result = await DB.query(query, value)
-        return result
+        return result.rows[0]
     }
 
     async receiveOpenOrder() {

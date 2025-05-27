@@ -25,7 +25,7 @@ class Queries {
             variables += `,$${i}`
 
         const dbQuery = {
-            query: `insert into ${table} (${Object.keys(data)}) values (${variables})`,
+            query: `insert into ${table} (${Object.keys(data)}) values (${variables}) returning id`,
             value: Object.values(data)
         }
         return dbQuery

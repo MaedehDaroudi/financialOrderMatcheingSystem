@@ -5,19 +5,19 @@ const message = {
     },
     orderUpdated: {
         fa: "سفارش‌های هماهنگ با بازار به‌روزرسانی شدند.",
-        en: "Orders aligned with market price were updated."
+        en: "Orders aligned with market price have been updated."
     },
     userRegister: {
-        fa: "کاربر ثبت نام شد.",
-        en: "user register"
+        fa: "کاربر با موفقیت ثبت‌نام شد.",
+        en: "User registered successfully."
     },
     userOrderUpdated: {
-        fa: "سفارش‌ شما ویرایش شد",
-        en: "Your order has been updated",
+        fa: "سفارش شما ویرایش شد.",
+        en: "Your order has been updated."
     },
     userOrderDeleted: {
-        fa: "سفارش حذف شد",
-        en: "order has been deleted",
+        fa: "سفارش با موفقیت حذف شد.",
+        en: "Your order has been deleted."
     }
 }
 

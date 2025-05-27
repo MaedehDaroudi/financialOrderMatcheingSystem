@@ -32,7 +32,10 @@ class OrderService {
 
         const result = await orderRepository.createOrder(userId, price, type)
         await redis.cacheDel('ordersData')
-        return message.orderCreated
+        return {
+            orderId:result.id,
+            message:message.orderCreated
+        }
     }
 
     async matchWithMarket() {
