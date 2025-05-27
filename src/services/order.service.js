@@ -75,8 +75,15 @@ class OrderService {
         return message.userOrderUpdated
     }
 
-    async removeOrder(orderId) {
-
+    async removeOrder(userId, orderId) {
+        const orderData = await orderRepository.receiveOrder(orderId)
+        if (!orderData?.length || userId !== orderData?.[0]?.user_id)
+            throw errorConstants.userOrderNotFound
+        if (orderData?.[0]?.status !== 'open')
+            throw errorConstants.OrderRemovedNotAllowed
+        await orderRepository.removeOrder(orderId)
+        await redis.cacheDel('ordersData')
+        return message.userOrderDeleted
     }
 
     async fetchMarketData() {

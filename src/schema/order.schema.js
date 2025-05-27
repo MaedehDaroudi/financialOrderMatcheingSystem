@@ -38,7 +38,7 @@ const schema = {
         type: "object",
         properties: {
             id: {
-                type: 'string'
+                type: 'number'
             },
             price: {
                 type: 'string'
@@ -58,10 +58,10 @@ const schema = {
         type: "object",
         properties: {
             id: {
-                type: 'string'
+                type: 'number'
             }
         },
-        required: ["price", "type", "userId"],
+        required: ["id"],
         additionalProperties: false
     }
 }

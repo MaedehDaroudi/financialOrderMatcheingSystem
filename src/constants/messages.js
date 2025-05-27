@@ -14,6 +14,10 @@ const message = {
     userOrderUpdated: {
         fa: "سفارش‌ شما ویرایش شد",
         en: "Your order has been updated",
+    },
+    userOrderDeleted: {
+        fa: "سفارش حذف شد",
+        en: "order has been deleted",
     }
 }
 

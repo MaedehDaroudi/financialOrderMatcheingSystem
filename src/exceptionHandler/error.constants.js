@@ -56,6 +56,13 @@ const errors = {
             'fa': 'این سفارش قابلیت ویرایش ندارد',
             'en': 'This order cannot be edited.'
         }
+    },
+    OrderRemovedNotAllowed: {
+        status: 409,
+        message: {
+            'fa': 'این سفارش قابلیت حذف ندارد',
+            'en': 'This order cannot be removed.'
+        }
     }
 }
 

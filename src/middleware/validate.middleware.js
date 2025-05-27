@@ -7,12 +7,26 @@ function validateSchema(schema) {
     return (req, res, next) => {
         const valid = validate(req.method === 'GET' ? req.query : req.body);
         if (!valid) {
+            // const errorMessages = validate.errors.map((err) => {
+            //     return {
+            //         message: err.message,
+            //         schemaPath: err.schemaPath
+            //     }
+            // });
+
             const errorMessages = validate.errors.map((err) => {
+                if (err.keyword === 'additionalProperties') {
+                    return {
+                        message: `'${err.params.additionalProperty}'`,
+                        schemaPath: err.schemaPath
+                    };
+                }
                 return {
                     message: err.message,
                     schemaPath: err.schemaPath
-                }
+                };
             });
+
             return res.status(400).json({ errors: errorMessages });
         }
         next();

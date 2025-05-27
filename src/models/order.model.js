@@ -1,6 +1,7 @@
 class OrderModel {
     #create
     #updateModel;
+    #removeModel;
     #receiveModel;
     #closeOrderModel
     #receiveOpenOrder
@@ -10,7 +11,9 @@ class OrderModel {
         this.#receiveModel = {
             table: 'orders',
             fields: '*',
-            conditions: {}
+            conditions: {
+                deleted: "0"
+            }
         }
 
         this.#create = {
@@ -32,6 +35,13 @@ class OrderModel {
         this.#updateModel = {
             table: 'orders',
             data: {},
+            conditionField: 'id',
+            conditionValue: null
+        }
+
+        this.#removeModel = {
+            table: 'orders',
+            data: { "deleted": 1 },
             conditionField: 'id',
             conditionValue: null
         }
@@ -97,6 +107,14 @@ class OrderModel {
 
     get updateOrder() {
         return this.#updateModel
+    }
+
+    set removeOrder(data) {
+        this.#removeModel.conditionValue = data.orderId
+    }
+
+    get removeOrder() {
+        return this.#removeModel
     }
 }
 

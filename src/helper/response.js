@@ -8,7 +8,7 @@ class Response {
             status: status || 400,
             data: {
                 id: uuidv4.v4(),
-                message
+                result: { message }
             }
         }
 

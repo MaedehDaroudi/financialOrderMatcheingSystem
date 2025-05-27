@@ -39,8 +39,15 @@ class OrderRepository {
     }
 
     async updateOrder(orderId, price, type) {
-        orderModel.updateOrder = { orderId, price,type }
+        orderModel.updateOrder = { orderId, price, type }
         const { table, data, conditionField, conditionValue } = orderModel.updateOrder
+        const { query, value } = Queries.update(table, data, conditionField, conditionValue)
+        await DB.query(query, value)
+    }
+
+    async removeOrder(orderId) {
+        orderModel.removeOrder = { orderId }
+        const { table, data, conditionField, conditionValue } = orderModel.removeOrder
         const { query, value } = Queries.update(table, data, conditionField, conditionValue)
         await DB.query(query, value)
     }

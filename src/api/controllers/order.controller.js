@@ -66,7 +66,6 @@ class OrderController {
                 res.status(error.status).send(Response.generate(error.status, error.message))
             else
                 res.status(400).send(Response.generate(null, error))
-
         }
     }
 
@@ -74,7 +73,7 @@ class OrderController {
         try {
             req.user = await authMiddleware.authenticate(req)
             const { id } = req.body
-            const result = await orderService.removeOrder(req.user.username, id)
+            const result = await orderService.removeOrder(req.user.id,id, id)
             res.send(Response.generate(200, result))
         }
         catch (error) {

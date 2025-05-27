@@ -22,7 +22,7 @@ class Queries {
     static create(table, data) {
         let variables = '$1'
         for (let i = 2; i <= Object.keys(data).length; i++)
-                variables += `,$${i}`
+            variables += `,$${i}`
 
         const dbQuery = {
             query: `insert into ${table} (${Object.keys(data)}) values (${variables})`,
@@ -45,6 +45,14 @@ class Queries {
         const dbQuery = {
             query: `update ${table} SET ${updateData} where ${conditionField} = $${countDataValues.length + 1}`,
             value: [...values, conditionValue]
+        }
+        return dbQuery
+    }
+
+    static remove(table, conditionField, conditionValue) {
+        const dbQuery = {
+            query: `delete from ${table} where ${conditionField}=$1`,
+            value: [conditionValue]
         }
         return dbQuery
     }
