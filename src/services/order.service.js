@@ -1,10 +1,10 @@
 const axios = require('axios');
 const redis = require('../loaders/redis')
 const message = require('../constants/messages')
-const UsersService = require('../services/user.service')
+const AuthRepository = require('../repositories/auth.repository')
 const OrderRepository = require('../repositories/order.repository')
 const errorConstants = require('../exceptionHandler/error.constants')
-const usersService = new UsersService()
+const authRepository = new AuthRepository()
 const orderRepository = new OrderRepository()
 class OrderService {
     constructor() {
@@ -25,8 +25,8 @@ class OrderService {
         return orderData
     }
 
-    async createOrder(userId, price, type) {
-        const userData = await usersService.receiveUser(userId)
+    async createOrder(username, userId, price, type) {
+        const userData = await authRepository.findByUsername(username)
         if (!userData.length)
             throw errorConstants.userNotFound
 

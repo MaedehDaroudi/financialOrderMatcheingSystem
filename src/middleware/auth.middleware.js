@@ -11,6 +11,7 @@ async function authenticate(req) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = decoded;
+            return req.user
         }
         catch (err) {
             throw errorConstants.invalidToken;
