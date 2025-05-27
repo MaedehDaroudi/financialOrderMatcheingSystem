@@ -7,8 +7,8 @@ class OrderRepository {
     constructor() {
     }
 
-    async receiveOrder(id, type, status) {
-        orderModel.receiveOrder = { id, type, status }
+    async receiveOrder(userId, orderId, type, status) {
+        orderModel.receiveOrder = { userId, orderId, type, status }
         const { table, fields, conditions } = orderModel.receiveOrder
         const { query, value } = Queries.receive(table, fields, conditions)
         const result = await DB.query(query, value)

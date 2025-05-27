@@ -11,15 +11,15 @@ class OrderService {
 
     }
 
-    async receiveOrder(id, type, status) {
-        const localKey = 'orderData' + Object.entries({ id, type, status })
+    async receiveOrder(userId, orderId, type, status) {
+        const localKey = `orderData_userId_${userId}` + Object.entries({ orderId, type, status })
             .filter(([_, value]) => value !== undefined)
             .map(([key, value]) => `_${key}_${value}`)
             .join('');
 
         let orderData = await redis.cacheGet(localKey)
         if (!orderData) {
-            orderData = await orderRepository.receiveOrder(id, type, status)
+            orderData = await orderRepository.receiveOrder(userId, orderId, type, status)
             await redis.CacheSet(localKey, orderData, process.env.REDIS_TTL)
         }
         return orderData
@@ -31,10 +31,12 @@ class OrderService {
             throw errorConstants.userNotFound
 
         const result = await orderRepository.createOrder(userId, price, type)
+        await this.#clearOrderDataCash()
+
         await redis.cacheDel('ordersData')
         return {
-            orderId:result.id,
-            message:message.orderCreated
+            orderId: result.id,
+            message: message.orderCreated
         }
     }
 
@@ -57,7 +59,7 @@ class OrderService {
         const results = await Promise.allSettled(closePromises)
         const allSuccessful = results.every(result => result.status === 'fulfilled');
         if (allSuccessful) {
-            redis.cacheDel('orderData')
+            await this.#clearOrderDataCash()
             return message.orderUpdated
         }
         else {
@@ -74,7 +76,7 @@ class OrderService {
         if (orderData?.[0]?.status !== 'open')
             throw errorConstants.OrderEditNotAllowed
         await orderRepository.updateOrder(orderId, price, type)
-        await redis.cacheDel('ordersData')
+        await this.#clearOrderDataCash()
         return message.userOrderUpdated
     }
 
@@ -85,7 +87,7 @@ class OrderService {
         if (orderData?.[0]?.status !== 'open')
             throw errorConstants.OrderRemovedNotAllowed
         await orderRepository.removeOrder(orderId)
-        await redis.cacheDel('ordersData')
+        await this.#clearOrderDataCash()
         return message.userOrderDeleted
     }
 
@@ -113,6 +115,13 @@ class OrderService {
             if (order.type === 'buy') return order.price > marketPrice;
             else if (order.type === 'sell') return order.price < marketPrice;
         });
+    }
+
+    async #clearOrderDataCash() {
+        const keys = await redis.keys('ordersData_*');
+        if (keys.length > 0) {
+            await redis.del(...keys);
+        }
     }
 }
 

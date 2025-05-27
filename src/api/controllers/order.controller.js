@@ -10,9 +10,9 @@ class OrderController {
 
     async receiveOrder(req, res) {
         try {
-            await authMiddleware.authenticate(req)
+            req.user = await authMiddleware.authenticate(req)
             const { id, type, status } = req.query
-            const result = await orderService.receiveOrder(id, type, status)
+            const result = await orderService.receiveOrder(req.user.id, id, type, status)
             res.send(Response.generate(200, result))
         }
         catch (error) {
@@ -73,7 +73,7 @@ class OrderController {
         try {
             req.user = await authMiddleware.authenticate(req)
             const { id } = req.body
-            const result = await orderService.removeOrder(req.user.id,id, id)
+            const result = await orderService.removeOrder(req.user.id, id, id)
             res.send(Response.generate(200, result))
         }
         catch (error) {

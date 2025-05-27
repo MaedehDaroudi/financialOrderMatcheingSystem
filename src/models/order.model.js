@@ -90,7 +90,8 @@ class OrderModel {
     }
 
     set receiveOrder(data) {
-        if (data?.id) this.#receiveModel.conditions.id = +data.id
+        this.#receiveModel.conditions.user_id = data.userId
+        if (data?.orderId) this.#receiveModel.conditions.id = +data.orderId
         if (data?.type) this.#receiveModel.conditions.type = data.type
         if (data?.status) this.#receiveModel.conditions.status = data.status
     }
